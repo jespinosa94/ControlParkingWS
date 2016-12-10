@@ -1,6 +1,6 @@
 ﻿namespace Cliente
 {
-    partial class Form1
+    partial class Control
     {
         /// <summary>
         /// Variable del diseñador necesaria.

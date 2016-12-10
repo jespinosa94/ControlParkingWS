@@ -10,10 +10,12 @@ using System.Windows.Forms;
 
 namespace Cliente
 {
-    public partial class Form1 : Form
+    public partial class Control : Form
     {
-        public Form1()
+        private String usuario;
+        public Control(String p_usuario)
         {
+            usuario = p_usuario;
             InitializeComponent();
         }
 
