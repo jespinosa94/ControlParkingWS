@@ -41,7 +41,6 @@ public class Sonda {
 	}
 	
 	private void leerKey() {
-		//Lee el archivo key controlando excepciones
 		File fichero = new File("key.txt");
 		if(fichero.exists()) {
 			try {
