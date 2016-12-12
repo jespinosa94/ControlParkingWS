@@ -15,6 +15,7 @@ namespace Cliente
         public Login()
         {
             InitializeComponent();
+            AcceptButton = button1;
         }
 
         private void label1_Click(object sender, EventArgs e)

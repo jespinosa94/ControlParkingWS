@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns="http://master" xmlns:ns1="http://org.apache.axis2/xsd" targetNamespace="http://master" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation>
+		Please Type your service description here
+	</wsdl:documentation>
+  <wsdl:types>
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://master">
+      <xs:element name="GetLed">
+        <xs:complexType>
+          <xs:sequence />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetLedResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SetLed">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="valor" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetVolumen">
+        <xs:complexType>
+          <xs:sequence />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetVolumenResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getFechaActual">
+        <xs:complexType>
+          <xs:sequence />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getFechaActualResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getFechaActualRequest">
+    <wsdl:part name="parameters" element="ns:getFechaActual" />
+  </wsdl:message>
+  <wsdl:message name="getFechaActualResponse">
+    <wsdl:part name="parameters" element="ns:getFechaActualResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetLedRequest">
+    <wsdl:part name="parameters" element="ns:GetLed" />
+  </wsdl:message>
+  <wsdl:message name="GetLedResponse">
+    <wsdl:part name="parameters" element="ns:GetLedResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetLedRequest">
+    <wsdl:part name="parameters" element="ns:SetLed" />
+  </wsdl:message>
+  <wsdl:message name="GetVolumenRequest">
+    <wsdl:part name="parameters" element="ns:GetVolumen" />
+  </wsdl:message>
+  <wsdl:message name="GetVolumenResponse">
+    <wsdl:part name="parameters" element="ns:GetVolumenResponse" />
+  </wsdl:message>
+  <wsdl:portType name="SondaPortType">
+    <wsdl:operation name="getFechaActual">
+      <wsdl:input wsaw:Action="urn:getFechaActual" message="ns:getFechaActualRequest" />
+      <wsdl:output wsaw:Action="urn:getFechaActualResponse" message="ns:getFechaActualResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLed">
+      <wsdl:input wsaw:Action="urn:GetLed" message="ns:GetLedRequest" />
+      <wsdl:output wsaw:Action="urn:GetLedResponse" message="ns:GetLedResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="SetLed">
+      <wsdl:input wsaw:Action="urn:SetLed" message="ns:SetLedRequest" />
+    </wsdl:operation>
+    <wsdl:operation name="GetVolumen">
+      <wsdl:input wsaw:Action="urn:GetVolumen" message="ns:GetVolumenRequest" />
+      <wsdl:output wsaw:Action="urn:GetVolumenResponse" message="ns:GetVolumenResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SondaSoap11Binding" type="ns:SondaPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getFechaActual">
+      <soap:operation soapAction="urn:getFechaActual" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLed">
+      <soap:operation soapAction="urn:GetLed" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetLed">
+      <soap:operation soapAction="urn:SetLed" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="GetVolumen">
+      <soap:operation soapAction="urn:GetVolumen" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SondaSoap12Binding" type="ns:SondaPortType">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getFechaActual">
+      <soap12:operation soapAction="urn:getFechaActual" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLed">
+      <soap12:operation soapAction="urn:GetLed" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetLed">
+      <soap12:operation soapAction="urn:SetLed" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="GetVolumen">
+      <soap12:operation soapAction="urn:GetVolumen" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SondaHttpBinding" type="ns:SondaPortType">
+    <http:binding verb="POST" />
+    <wsdl:operation name="getFechaActual">
+      <http:operation location="getFechaActual" />
+      <wsdl:input>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLed">
+      <http:operation location="GetLed" />
+      <wsdl:input>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetLed">
+      <http:operation location="SetLed" />
+      <wsdl:input>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="GetVolumen">
+      <http:operation location="GetVolumen" />
+      <wsdl:input>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Sonda">
+    <wsdl:port name="SondaHttpSoap11Endpoint" binding="ns:SondaSoap11Binding">
+      <soap:address location="http://localhost:8080/Sonda/services/Sonda.SondaHttpSoap11Endpoint/" />
+    </wsdl:port>
+    <wsdl:port name="SondaHttpSoap12Endpoint" binding="ns:SondaSoap12Binding">
+      <soap12:address location="http://localhost:8080/Sonda/services/Sonda.SondaHttpSoap12Endpoint/" />
+    </wsdl:port>
+    <wsdl:port name="SondaHttpEndpoint" binding="ns:SondaHttpBinding">
+      <http:address location="http://localhost:8080/Sonda/services/Sonda.SondaHttpEndpoint/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
