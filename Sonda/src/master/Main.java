@@ -54,6 +54,8 @@ public class Main {
 		
 		
 		System.out.println(crypt.decrypt(sonda3.GetVolumen(), key));
-		
+		System.out.println(crypt.decrypt(sonda3.GetLed(), key));
+		sonda3.SetLed(crypt.encrypt("20", key));		
+		System.out.println(crypt.decrypt(sonda3.GetLed(), key));
 	}
 }

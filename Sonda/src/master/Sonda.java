@@ -7,18 +7,30 @@ public class Sonda {
 	private String volumen;
 	private String fechaUltimoCambio;
 	private String led;
-	private String id;
+	private String id = "4";
 	private String ficheroAsociado = "\\src\\master\\sonda.txt";
-	private String key;
+	private String key = "topotamadre";
 	
-	public Sonda(int id) {
-		this.id = Integer.toString(id);
+	public Sonda(/*int id*/) {
+		//this.id = Integer.toString(id);
 		leerSensor(ficheroAsociado);
-		leerKey();
+		//leerKey();
+	}
+	
+	public String GetId() {
+		String mensaje = System.getProperty("user.dir");
+		/*Encriptador crypt = new Encriptador();
+		
+		try {
+			mensaje = crypt.encrypt(id, key);
+		} catch(Exception e) {
+			System.out.println("Error al encriptar la id: " + e.toString());
+		}*/
+		return mensaje;
 	}
 	
 	public String GetVolumen() {
-		String mensaje = "";
+		String mensaje = "mecagoento";
 		Encriptador crypt = new Encriptador();
 		
 		try {
@@ -56,14 +68,40 @@ public class Sonda {
 		return mensaje;
 	}
 	
-	public void SetLed( String valor) {
+	public void SetLed( String mensaje) {
+		Encriptador crypt = new Encriptador();
+		String nuevoValor = crypt.decrypt(mensaje, key);
 		String valorAnterior = led;
-		led = valor;
-		//Falta escribir en el fichero
+		led = nuevoValor;
+		escribeFichero(valorAnterior, nuevoValor, ficheroAsociado);
 	}
 	
 	private void leerKey() {
-		File fichero = new File(System.getProperty("user.dir") + "\\src\\master\\key.txt");
+		String nombreArchivo = "key.txt";
+		File fl = new File(nombreArchivo);
+		FileReader fr = null;
+		BufferedReader br = null;
+		try {
+			fr = new FileReader(nombreArchivo);
+			br = new BufferedReader(fr);
+
+			String linea;
+			linea = br.readLine();
+			key = linea;
+			br.close();
+			fr.close();
+		} catch(Exception e) {
+			System.out.println("Error al leer el fichero del key: " + e.toString());
+		} finally {
+			try {
+				if (null != fr) {
+					fr.close();
+				}
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		/*File fichero = new File(System.getProperty("user.dir") + "\\src\\master\\key.txt");
 		if(fichero.exists()) {
 			try {
 				FileReader fr = new FileReader(fichero);
@@ -77,11 +115,47 @@ public class Sonda {
 			}
 		} else {
 			System.out.println("Error: el fichero \"key.txt\" no se encuentra" + fichero);
-		}
+		}*/
 	}
 	
 	private void leerSensor(String archivo) {
-		File fichero = new File(System.getProperty("user.dir") + archivo);
+		String nombreArchivo = "sonda.txt";
+		File fl = new File(nombreArchivo);
+		FileReader fr = null;
+		BufferedReader br = null;
+		try {
+			fr = new FileReader(nombreArchivo);
+			br = new BufferedReader(fr);
+
+			String linea;
+			while ((linea = br.readLine()) != null) {
+				switch(linea.toLowerCase().split("=")[0]) {
+				case "volumen":
+					volumen = linea.split("=")[1];
+					break;
+				case "ultimafecha":
+					fechaUltimoCambio = linea.split("=")[1];
+					break;
+				case "led":
+					led = linea.split("=")[1];
+					break;
+				}
+			}
+			br.close();
+			fr.close();
+		} catch(Exception e) {
+			System.out.println("Error al leer el fichero del sensor: " + e.toString());
+		} finally {
+			try {
+				if (null != fr) {
+					fr.close();
+				}
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		
+		/*File fichero = new File(System.getProperty("user.dir") + archivo);
 		if(fichero.exists()) {
 			try {
 				FileReader fr = new FileReader(fichero);
@@ -117,7 +191,7 @@ public class Sonda {
 			} catch(Exception e) {
 				System.out.println("Error creando el fichero por defecto del sensor " + id + ": " + e.toString());
 			}
-		}	
+		}*/	
 	}
 	
 	public void escribeFichero(String valorAnterior, String nuevoValor, String nombreFichero) {
@@ -145,7 +219,6 @@ public class Sonda {
 	          fw.write("\n");
 	          fw.flush();
 	        }
-
 	        fw.close();
 		} catch(Exception e) {
 			System.out.println("Error haciendo Set de la luz del sensor: " + e.toString());
