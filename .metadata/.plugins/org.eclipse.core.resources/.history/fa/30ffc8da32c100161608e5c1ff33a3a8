@@ -84,7 +84,7 @@ public class Sonda {
 		File fichero = new File(System.getProperty("user.dir") + archivo);
 		if(fichero.exists()) {
 			try {
-				FileReader fr = new FileReader(fichero);
+				FileReader fr = new FileReader();
 				BufferedReader br = new BufferedReader(fr);
 				String linea;
 				while((linea = br.readLine()) != null) {

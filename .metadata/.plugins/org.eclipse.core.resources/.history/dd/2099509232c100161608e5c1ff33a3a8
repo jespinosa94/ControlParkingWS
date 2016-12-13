@@ -13,7 +13,7 @@ public class Sonda {
 	
 	public Sonda(int id) {
 		this.id = Integer.toString(id);
-		leerSensor(ficheroAsociado);
+		//leerSensor(ficheroAsociado);
 		leerKey();
 	}
 	
@@ -81,10 +81,10 @@ public class Sonda {
 	}
 	
 	private void leerSensor(String archivo) {
-		File fichero = new File(System.getProperty("user.dir") + archivo);
+		File fichero = new File(archivo);
 		if(fichero.exists()) {
 			try {
-				FileReader fr = new FileReader(fichero);
+				FileReader fr = new FileReader(System.getProperty("user.dir") + fichero);
 				BufferedReader br = new BufferedReader(fr);
 				String linea;
 				while((linea = br.readLine()) != null) {

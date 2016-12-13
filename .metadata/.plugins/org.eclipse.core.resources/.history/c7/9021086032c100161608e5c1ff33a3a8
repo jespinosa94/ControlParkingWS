@@ -8,7 +8,7 @@ public class Sonda {
 	private String fechaUltimoCambio;
 	private String led;
 	private String id;
-	private String ficheroAsociado = "\\src\\master\\sonda.txt";
+	private String ficheroAsociado = "\\sonda.txt";
 	private String key;
 	
 	public Sonda(int id) {
@@ -63,7 +63,7 @@ public class Sonda {
 	}
 	
 	private void leerKey() {
-		File fichero = new File(System.getProperty("user.dir") + "\\src\\master\\key.txt");
+		File fichero = new File(System.getProperty("user.dir") + "\\key.txt");
 		if(fichero.exists()) {
 			try {
 				FileReader fr = new FileReader(fichero);
@@ -76,15 +76,15 @@ public class Sonda {
 				System.out.println("Error estableciendo la clave de cifrado: fichero corrupto (" + e.toString() + ")");
 			}
 		} else {
-			System.out.println("Error: el fichero \"key.txt\" no se encuentra" + fichero);
+			System.out.println("Error: el fichero \"key.txt\" no se encuentra");
 		}
 	}
 	
 	private void leerSensor(String archivo) {
-		File fichero = new File(System.getProperty("user.dir") + archivo);
+		File fichero = new File(archivo);
 		if(fichero.exists()) {
 			try {
-				FileReader fr = new FileReader(fichero);
+				FileReader fr = new FileReader(System.getProperty("user.dir") + fichero);
 				BufferedReader br = new BufferedReader(fr);
 				String linea;
 				while((linea = br.readLine()) != null) {

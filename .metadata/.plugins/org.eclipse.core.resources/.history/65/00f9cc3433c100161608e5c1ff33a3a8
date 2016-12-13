@@ -48,12 +48,7 @@ public class Main {
 		System.out.println("Texto encriptado: " + resultado);
 		System.out.println("Texto desencriptado: " + crypt.decrypt(resultado, key));**/
 		
-		Encriptador crypt = new Encriptador();
-		final String key = leerKey();
 		Sonda sonda3 = new Sonda(3);
-		
-		
-		System.out.println(crypt.decrypt(sonda3.GetVolumen(), key));
-		
+		System.out.println(sonda3.GetVolumen());
 	}
 }

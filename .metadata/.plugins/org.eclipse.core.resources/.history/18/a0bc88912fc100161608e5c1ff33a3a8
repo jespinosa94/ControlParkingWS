@@ -8,7 +8,7 @@ public class Sonda {
 	private String fechaUltimoCambio;
 	private String led;
 	private String id;
-	private String ficheroAsociado = "\\src\\master\\sonda.txt";
+	private String ficheroAsociado = "sonda.txt";
 	private String key;
 	
 	public Sonda(int id) {
@@ -19,41 +19,19 @@ public class Sonda {
 	
 	public String GetVolumen() {
 		String mensaje = "";
-		Encriptador crypt = new Encriptador();
 		
-		try {
-			mensaje = crypt.encrypt(volumen, key);
-		} catch(Exception e) {
-			System.out.println("Error al encriptar el volumen: " + e.toString());
-		}
 		return mensaje;
 	}
 	
 	public String getFechaActual() {
-		Encriptador crypt = new Encriptador();
-		String mensaje = "";
 		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
 		String fechaActual = now.format(formato);
-		
-		try {
-			mensaje = crypt.encrypt(fechaActual, key);
-		} catch (Exception e) {
-			System.out.println("Error al encriptar la fecha actual: " + e.toString());
-		}
-		return mensaje;
+		return fechaActual;
 	}
 	
 	public String GetLed() {
-		Encriptador crypt = new Encriptador();
-		String mensaje = "";
-		
-		try {
-			mensaje = crypt.encrypt(led, key);
-		} catch(Exception e) {
-			System.out.println("Error al encriptar el led: " + e.toString());
-		}
-		return mensaje;
+		return led;
 	}
 	
 	public void SetLed( String valor) {
@@ -63,7 +41,7 @@ public class Sonda {
 	}
 	
 	private void leerKey() {
-		File fichero = new File(System.getProperty("user.dir") + "\\src\\master\\key.txt");
+		File fichero = new File("key.txt");
 		if(fichero.exists()) {
 			try {
 				FileReader fr = new FileReader(fichero);
@@ -76,12 +54,12 @@ public class Sonda {
 				System.out.println("Error estableciendo la clave de cifrado: fichero corrupto (" + e.toString() + ")");
 			}
 		} else {
-			System.out.println("Error: el fichero \"key.txt\" no se encuentra" + fichero);
+			System.out.println("Error: el fichero \"key.txt\" no se encuentra");
 		}
 	}
 	
 	private void leerSensor(String archivo) {
-		File fichero = new File(System.getProperty("user.dir") + archivo);
+		File fichero = new File(archivo);
 		if(fichero.exists()) {
 			try {
 				FileReader fr = new FileReader(fichero);
@@ -119,36 +97,4 @@ public class Sonda {
 			}
 		}	
 	}
-	
-	public void escribeFichero(String valorAnterior, String nuevoValor, String nombreFichero) {
-		File fichero = new File(System.getProperty("user.dir") + nombreFichero);
-		String lectura = "";	
-		
-		try {
-	        FileReader fr = new FileReader(fichero);
-	        BufferedReader br = new BufferedReader(fr);
-
-	        String linea;
-	        while((linea = br.readLine()) != null) {
-	          if(linea.contains(valorAnterior)) {
-	            linea = linea.replace(valorAnterior, nuevoValor);
-	          }
-	          lectura += linea + ",";
-	        }
-	        br.close();
-	        fr.close();
-	        
-	        String[] escritura = lectura.split(",");
-	        FileWriter fw = new FileWriter(fichero, false);
-	        for(String s: escritura) {
-	          fw.write(s);
-	          fw.write("\n");
-	          fw.flush();
-	        }
-
-	        fw.close();
-		} catch(Exception e) {
-			System.out.println("Error haciendo Set de la luz del sensor: " + e.toString());
-		}
-}
 }
