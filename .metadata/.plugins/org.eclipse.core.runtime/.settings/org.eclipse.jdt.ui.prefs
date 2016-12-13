@@ -1,8 +1,10 @@
+content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"><lhs name\="java.security.spec.KeySpec"><rhs name\="javax.crypto.spec.SecretKeySpec"/></lhs><lhs name\="javax.crypto.SecretKey"><rhs name\="javax.crypto.spec.SecretKeySpec"/></lhs><lhs name\="java.security.Key"><rhs name\="javax.crypto.spec.SecretKeySpec"/></lhs><lhs name\="javax.security.auth.Destroyable"><rhs name\="javax.crypto.spec.SecretKeySpec"/></lhs><lhs name\="javax.crypto.spec.SecretKeySpec"><rhs name\="javax.crypto.spec.SecretKeySpec"/></lhs><lhs name\="master.Encriptador"><rhs name\="master.Encriptador"/></lhs><lhs name\="master.Sonda"><rhs name\="master.Sonda"/></lhs></history>
 content_assist_number_of_computers=21
 content_assist_proposals_background=255,255,255
 content_assist_proposals_foreground=0,0,0
 eclipse.preferences.version=1
 fontPropagated=true
+org.eclipse.jdt.internal.ui.navigator.layout=2
 org.eclipse.jdt.ui.editor.tab.width=
 org.eclipse.jdt.ui.formatterprofiles.version=12
 org.eclipse.jdt.ui.javadoclocations.migrated=true
