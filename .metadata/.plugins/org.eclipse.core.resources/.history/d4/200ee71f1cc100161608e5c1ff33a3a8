@@ -40,6 +40,8 @@ public class Main {
 		String cadena = "";
 		String resultado = "";
 		
+		Encriptador.setKey(key);
+		
 		System.out.println("Escribe la cadena a encriptar: ");
 		cadena = reader.nextLine();
 		resultado = Encriptador.encrypt(cadena.trim(), key);

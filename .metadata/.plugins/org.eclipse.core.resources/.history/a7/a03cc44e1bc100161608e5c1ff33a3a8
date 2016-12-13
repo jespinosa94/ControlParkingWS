@@ -49,20 +49,6 @@ public class Encriptador {
 		catch (Exception e) {
 			System.out.println("Error encriptando: " + e.toString());
 		}
-		return null;
-	}
-	
-	public static String decrypt(String cadena, String clave) {
-		try {
-			setKey(clave);
-			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-			cipher.init(Cipher.DECRYPT_MODE, secretKey);
-			return new String(cipher.doFinal(Base64.getDecoder().decode(cadena)));
-		}
-		catch (Exception e) {
-			System.out.println("Error en la desencriptación: " + e.toString());
-		}
-		return null;
 	}
 	
 	
