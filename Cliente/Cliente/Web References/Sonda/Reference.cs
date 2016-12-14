@@ -23,7 +23,7 @@ namespace Cliente.Sonda {
     
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Web.Services.WebServiceBindingAttribute(Name="SondaSoap11Binding", Namespace="http://master")]
@@ -33,12 +33,17 @@ namespace Cliente.Sonda {
         
         private System.Threading.SendOrPostCallback GetLedOperationCompleted;
         
+        private System.Threading.SendOrPostCallback GetIdOperationCompleted;
+        
         private System.Threading.SendOrPostCallback SetLedOperationCompleted;
         
         private System.Threading.SendOrPostCallback GetVolumenOperationCompleted;
         
-        private bool useDefaultCredentialsSetExplicitly;
+        private System.Threading.SendOrPostCallback escribeFicheroOperationCompleted;
         
+        private bool useDefaultCredentialsSetExplicitly;
+        private int v;
+
         /// <remarks/>
         public Sonda() {
             this.Url = global::Cliente.Properties.Settings.Default.Cliente_Sonda_Sonda;
@@ -50,7 +55,12 @@ namespace Cliente.Sonda {
                 this.useDefaultCredentialsSetExplicitly = true;
             }
         }
-        
+
+        public Sonda(int v)
+        {
+            this.v = v;
+        }
+
         public new string Url {
             get {
                 return base.Url;
@@ -82,10 +92,16 @@ namespace Cliente.Sonda {
         public event GetLedCompletedEventHandler GetLedCompleted;
         
         /// <remarks/>
+        public event GetIdCompletedEventHandler GetIdCompleted;
+        
+        /// <remarks/>
         public event SetLedCompletedEventHandler SetLedCompleted;
         
         /// <remarks/>
         public event GetVolumenCompletedEventHandler GetVolumenCompleted;
+        
+        /// <remarks/>
+        public event escribeFicheroCompletedEventHandler escribeFicheroCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:getFechaActual", RequestNamespace="http://master", ResponseNamespace="http://master", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -144,24 +160,52 @@ namespace Cliente.Sonda {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:GetId", RequestNamespace="http://master", ResponseNamespace="http://master", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [return: System.Xml.Serialization.XmlElementAttribute("return", IsNullable=true)]
+        public string GetId() {
+            object[] results = this.Invoke("GetId", new object[0]);
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetIdAsync() {
+            this.GetIdAsync(null);
+        }
+        
+        /// <remarks/>
+        public void GetIdAsync(object userState) {
+            if ((this.GetIdOperationCompleted == null)) {
+                this.GetIdOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetIdOperationCompleted);
+            }
+            this.InvokeAsync("GetId", new object[0], this.GetIdOperationCompleted, userState);
+        }
+        
+        private void OnGetIdOperationCompleted(object arg) {
+            if ((this.GetIdCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetIdCompleted(this, new GetIdCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:SetLed", RequestNamespace="http://master", OneWay=true, Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public void SetLed([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string valor) {
+        public void SetLed([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string mensaje) {
             this.Invoke("SetLed", new object[] {
-                        valor});
+                        mensaje});
         }
         
         /// <remarks/>
-        public void SetLedAsync(string valor) {
-            this.SetLedAsync(valor, null);
+        public void SetLedAsync(string mensaje) {
+            this.SetLedAsync(mensaje, null);
         }
         
         /// <remarks/>
-        public void SetLedAsync(string valor, object userState) {
+        public void SetLedAsync(string mensaje, object userState) {
             if ((this.SetLedOperationCompleted == null)) {
                 this.SetLedOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSetLedOperationCompleted);
             }
             this.InvokeAsync("SetLed", new object[] {
-                        valor}, this.SetLedOperationCompleted, userState);
+                        mensaje}, this.SetLedOperationCompleted, userState);
         }
         
         private void OnSetLedOperationCompleted(object arg) {
@@ -200,6 +244,38 @@ namespace Cliente.Sonda {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:escribeFichero", RequestNamespace="http://master", OneWay=true, Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void escribeFichero([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string valorAnterior, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string nuevoValor, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string nombreFichero) {
+            this.Invoke("escribeFichero", new object[] {
+                        valorAnterior,
+                        nuevoValor,
+                        nombreFichero});
+        }
+        
+        /// <remarks/>
+        public void escribeFicheroAsync(string valorAnterior, string nuevoValor, string nombreFichero) {
+            this.escribeFicheroAsync(valorAnterior, nuevoValor, nombreFichero, null);
+        }
+        
+        /// <remarks/>
+        public void escribeFicheroAsync(string valorAnterior, string nuevoValor, string nombreFichero, object userState) {
+            if ((this.escribeFicheroOperationCompleted == null)) {
+                this.escribeFicheroOperationCompleted = new System.Threading.SendOrPostCallback(this.OnescribeFicheroOperationCompleted);
+            }
+            this.InvokeAsync("escribeFichero", new object[] {
+                        valorAnterior,
+                        nuevoValor,
+                        nombreFichero}, this.escribeFicheroOperationCompleted, userState);
+        }
+        
+        private void OnescribeFicheroOperationCompleted(object arg) {
+            if ((this.escribeFicheroCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.escribeFicheroCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
@@ -219,11 +295,11 @@ namespace Cliente.Sonda {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     public delegate void getFechaActualCompletedEventHandler(object sender, getFechaActualCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getFechaActualCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -245,11 +321,11 @@ namespace Cliente.Sonda {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     public delegate void GetLedCompletedEventHandler(object sender, GetLedCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class GetLedCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -271,15 +347,41 @@ namespace Cliente.Sonda {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
+    public delegate void GetIdCompletedEventHandler(object sender, GetIdCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetIdCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetIdCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     public delegate void SetLedCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     public delegate void GetVolumenCompletedEventHandler(object sender, GetVolumenCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class GetVolumenCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -299,6 +401,10 @@ namespace Cliente.Sonda {
             }
         }
     }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
+    public delegate void escribeFicheroCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
 }
 
 #pragma warning restore 1591

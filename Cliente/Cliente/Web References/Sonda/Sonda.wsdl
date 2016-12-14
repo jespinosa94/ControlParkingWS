@@ -5,12 +5,24 @@
 	</wsdl:documentation>
   <wsdl:types>
     <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://master">
-      <xs:element name="GetLed">
+      <xs:element name="getFechaActual">
         <xs:complexType>
           <xs:sequence />
         </xs:complexType>
       </xs:element>
-      <xs:element name="GetLedResponse">
+      <xs:element name="getFechaActualResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetId">
+        <xs:complexType>
+          <xs:sequence />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetIdResponse">
         <xs:complexType>
           <xs:sequence>
             <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
@@ -20,7 +32,19 @@
       <xs:element name="SetLed">
         <xs:complexType>
           <xs:sequence>
-            <xs:element minOccurs="0" name="valor" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="mensaje" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetLed">
+        <xs:complexType>
+          <xs:sequence />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetLedResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -36,15 +60,12 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-      <xs:element name="getFechaActual">
-        <xs:complexType>
-          <xs:sequence />
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="getFechaActualResponse">
+      <xs:element name="escribeFichero">
         <xs:complexType>
           <xs:sequence>
-            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="valorAnterior" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="nuevoValor" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="nombreFichero" nillable="true" type="xs:string" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -62,6 +83,12 @@
   <wsdl:message name="GetLedResponse">
     <wsdl:part name="parameters" element="ns:GetLedResponse" />
   </wsdl:message>
+  <wsdl:message name="GetIdRequest">
+    <wsdl:part name="parameters" element="ns:GetId" />
+  </wsdl:message>
+  <wsdl:message name="GetIdResponse">
+    <wsdl:part name="parameters" element="ns:GetIdResponse" />
+  </wsdl:message>
   <wsdl:message name="SetLedRequest">
     <wsdl:part name="parameters" element="ns:SetLed" />
   </wsdl:message>
@@ -70,6 +97,9 @@
   </wsdl:message>
   <wsdl:message name="GetVolumenResponse">
     <wsdl:part name="parameters" element="ns:GetVolumenResponse" />
+  </wsdl:message>
+  <wsdl:message name="escribeFicheroRequest">
+    <wsdl:part name="parameters" element="ns:escribeFichero" />
   </wsdl:message>
   <wsdl:portType name="SondaPortType">
     <wsdl:operation name="getFechaActual">
@@ -80,12 +110,19 @@
       <wsdl:input wsaw:Action="urn:GetLed" message="ns:GetLedRequest" />
       <wsdl:output wsaw:Action="urn:GetLedResponse" message="ns:GetLedResponse" />
     </wsdl:operation>
+    <wsdl:operation name="GetId">
+      <wsdl:input wsaw:Action="urn:GetId" message="ns:GetIdRequest" />
+      <wsdl:output wsaw:Action="urn:GetIdResponse" message="ns:GetIdResponse" />
+    </wsdl:operation>
     <wsdl:operation name="SetLed">
       <wsdl:input wsaw:Action="urn:SetLed" message="ns:SetLedRequest" />
     </wsdl:operation>
     <wsdl:operation name="GetVolumen">
       <wsdl:input wsaw:Action="urn:GetVolumen" message="ns:GetVolumenRequest" />
       <wsdl:output wsaw:Action="urn:GetVolumenResponse" message="ns:GetVolumenResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="escribeFichero">
+      <wsdl:input wsaw:Action="urn:escribeFichero" message="ns:escribeFicheroRequest" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="SondaSoap11Binding" type="ns:SondaPortType">
@@ -108,6 +145,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetId">
+      <soap:operation soapAction="urn:GetId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="SetLed">
       <soap:operation soapAction="urn:SetLed" style="document" />
       <wsdl:input>
@@ -122,6 +168,12 @@
       <wsdl:output>
         <soap:body use="literal" />
       </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="escribeFichero">
+      <soap:operation soapAction="urn:escribeFichero" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="SondaSoap12Binding" type="ns:SondaPortType">
@@ -144,6 +196,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetId">
+      <soap12:operation soapAction="urn:GetId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="SetLed">
       <soap12:operation soapAction="urn:SetLed" style="document" />
       <wsdl:input>
@@ -158,6 +219,12 @@
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="escribeFichero">
+      <soap12:operation soapAction="urn:escribeFichero" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="SondaHttpBinding" type="ns:SondaPortType">
@@ -180,6 +247,15 @@
         <mime:content part="parameters" type="application/xml" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetId">
+      <http:operation location="GetId" />
+      <wsdl:input>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="SetLed">
       <http:operation location="SetLed" />
       <wsdl:input>
@@ -194,6 +270,12 @@
       <wsdl:output>
         <mime:content part="parameters" type="application/xml" />
       </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="escribeFichero">
+      <http:operation location="escribeFichero" />
+      <wsdl:input>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:input>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="Sonda">
