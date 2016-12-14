@@ -17,6 +17,7 @@ namespace Cliente
         private String usuario;
         private String ip_solicitada = "";
         private String puerto_solicitado = "";
+        private int numero_sondas = 0;
 
         public Control(String p_usuario)
         {
@@ -45,30 +46,42 @@ namespace Cliente
                 String[] peticion = textBox1.Text.Split(':');
                 ip_peticion = peticion[0];
                 puerto_peticion = peticion[1];
-                try
+                if (!textBox3.Text.Contains(textBox1.Text))
                 {
-                    Sonda.Sonda sonda = new Sonda.Sonda(2);
-                    sonda.Url = "http://" + ip_peticion + "/Sonda/services/Sonda.SondaHttpSoap11Endpoint/";
-                    idSonda = sonda.GetId();
-                    sondas.Add(idSonda);
-                    textBox3.Text += textBox1.Text + "\r\n";
-                    comboBox1.Items.Add(textBox1.Text);
-                    textBox1.Text = "IP_SONDA_X PUERTO_SONDA_X";
+                    try
+                    {
+                        Sonda.Sonda sonda = new Sonda.Sonda();
+                        sonda.Timeout = 2000;
+
+                        sonda.Url = "http://" + textBox1.Text + "/Sonda/services/Sonda.SondaHttpSoap11Endpoint/";
+                        sonda.getVolumen();
+                        numero_sondas += 1;    
+                        textBox3.Text += "Sonda " + numero_sondas + "= " + textBox1.Text + "\r\n";
+                        comboBox1.Items.Add("Sonda " + numero_sondas);
+                        textBox1.Text = "IP_SONDA_X:PUERTO_SONDA_X";
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Los parámetros indicados no se corresponden con ninguna sonda activa: \n\n" + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
-                catch
+                else
                 {
-                    MessageBox.Show("No se encuentra la sonda especificada", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("La sonda especificada ya se encuentra registrada", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch
             {
-                MessageBox.Show("Formato de la llamada IP:PUERTO", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("El formato de la llamada es IP:PUERTO", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-           
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
         {
 
         }
