@@ -1,42 +1,69 @@
 package master;
+
+import master.Encriptador;
+
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+
 public class Sonda {
+	private String key = "clavePorDefecto";
 	private String volumen;
-	private String fechaUltimoCambio;
+	private String ultimaFecha;
 	private String led;
-	private String id = "4";
-	private String ficheroAsociado = "\\src\\master\\sonda.txt";
-	private String key = "topotamadre";
 	
-	public Sonda(/*int id*/) {
-		//this.id = Integer.toString(id);
-		leerSensor(ficheroAsociado);
-		//leerKey();
+	public Sonda() {
+		leerKey();
+		leerSensor();
 	}
 	
-	public String GetId() {
-		String mensaje = System.getProperty("user.dir");
-		/*Encriptador crypt = new Encriptador();
-		
+	//d
+	/*public String decrypt(String s) {
+		Encriptador crypt = new Encriptador();
+		String mensaje = "";
 		try {
-			mensaje = crypt.encrypt(id, key);
-		} catch(Exception e) {
-			System.out.println("Error al encriptar la id: " + e.toString());
-		}*/
+			mensaje = crypt.decrypt(s, key);
+		} catch (Exception e) {
+			System.out.println("Error al desencriptar el mensaje: " + e.toString());
+		}
 		return mensaje;
-	}
+	}*/
 	
-	public String GetVolumen() {
-		String mensaje = "mecagoento";
+	public String getVolumen() {
+		String mensaje = "";
 		Encriptador crypt = new Encriptador();
 		
 		try {
 			mensaje = crypt.encrypt(volumen, key);
 		} catch(Exception e) {
 			System.out.println("Error al encriptar el volumen: " + e.toString());
+		}
+		return mensaje;
+	}
+	
+	public String getUltimaFecha() {
+		Encriptador crypt = new Encriptador();
+		String mensaje = "";
+		
+		try {
+			mensaje = crypt.encrypt(ultimaFecha, key);
+		} catch(Exception e) {
+			System.out.println("Error al encriptar el led: " + e.toString());
+		}
+		return mensaje;
+	}
+	
+	public String getLed() {
+		Encriptador crypt = new Encriptador();
+		String mensaje = "";
+		
+		try {
+			mensaje = crypt.encrypt(led, key);
+		} catch(Exception e) {
+			System.out.println("Error al encriptar el led: " + e.toString());
 		}
 		return mensaje;
 	}
@@ -56,118 +83,67 @@ public class Sonda {
 		return mensaje;
 	}
 	
-	public String GetLed() {
-		Encriptador crypt = new Encriptador();
-		String mensaje = "";
-		
-		try {
-			mensaje = crypt.encrypt(led, key);
-		} catch(Exception e) {
-			System.out.println("Error al encriptar el led: " + e.toString());
-		}
-		return mensaje;
-	}
-	
-	public void SetLed( String mensaje) {
-		Encriptador crypt = new Encriptador();
-		String nuevoValor = crypt.decrypt(mensaje, key);
+	public void setLed(String nuevoValor) {
 		String valorAnterior = led;
-		led = nuevoValor;
-		escribeFichero(valorAnterior, nuevoValor, ficheroAsociado);
-	}
-	
-	private void leerKey() {
-		String nombreArchivo = "key.txt";
-		File fl = new File(nombreArchivo);
-		FileReader fr = null;
-		BufferedReader br = null;
-		try {
-			fr = new FileReader(nombreArchivo);
-			br = new BufferedReader(fr);
-
-			String linea;
-			linea = br.readLine();
-			key = linea;
-			br.close();
-			fr.close();
-		} catch(Exception e) {
-			System.out.println("Error al leer el fichero del key: " + e.toString());
-		} finally {
-			try {
-				if (null != fr) {
-					fr.close();
-				}
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-		}
-		/*File fichero = new File(System.getProperty("user.dir") + "\\src\\master\\key.txt");
-		if(fichero.exists()) {
-			try {
-				FileReader fr = new FileReader(fichero);
-				BufferedReader br = new BufferedReader(fr);
-				String linea = br.readLine();
-				key = linea;
-				br.close();
-				fr.close();
-			}catch (Exception e){
-				System.out.println("Error estableciendo la clave de cifrado: fichero corrupto (" + e.toString() + ")");
-			}
-		} else {
-			System.out.println("Error: el fichero \"key.txt\" no se encuentra" + fichero);
-		}*/
-	}
-	
-	private void leerSensor(String archivo) {
-		String nombreArchivo = "sonda.txt";
-		File fl = new File(nombreArchivo);
-		FileReader fr = null;
-		BufferedReader br = null;
-		try {
-			fr = new FileReader(nombreArchivo);
-			br = new BufferedReader(fr);
-
-			String linea;
-			while ((linea = br.readLine()) != null) {
-				switch(linea.toLowerCase().split("=")[0]) {
-				case "volumen":
-					volumen = linea.split("=")[1];
-					break;
-				case "ultimafecha":
-					fechaUltimoCambio = linea.split("=")[1];
-					break;
-				case "led":
-					led = linea.split("=")[1];
-					break;
-				}
-			}
-			br.close();
-			fr.close();
-		} catch(Exception e) {
-			System.out.println("Error al leer el fichero del sensor: " + e.toString());
-		} finally {
-			try {
-				if (null != fr) {
-					fr.close();
-				}
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-		}
 		
-		/*File fichero = new File(System.getProperty("user.dir") + archivo);
-		if(fichero.exists()) {
+		led = nuevoValor;
+		try {
+			escribeFichero(valorAnterior, nuevoValor);
+		} catch(Exception e) {
+			System.out.println("Error actualizando el valor del led: " + e.toString());
+		}
+	}
+	
+	private void escribeFichero(String valorAnterior, String nuevoValor) {
+		File catalinaBase = new File(System.getProperty("catalina.base")).getAbsoluteFile();
+		File archivo = new File(catalinaBase, "webapps\\Sonda\\WEB-INF\\services\\Sonda\\master\\sonda.txt");
+		String lectura = "";
+		
+		try {
+			FileReader fr = new FileReader(archivo);
+			BufferedReader br = new BufferedReader(fr);
+			String linea = "";
+			
+			while((linea = br.readLine()) != null) {
+				if(linea.contains(valorAnterior)) {
+					linea = linea.replace(valorAnterior, nuevoValor);
+				}
+				lectura += linea + ",";
+			}
+			br.close();
+			fr.close();
+			//d
+			//System.out.println(lectura);
+			String[] escritura = lectura.split(",");
+	        FileWriter fw = new FileWriter(archivo, false);
+	        for(String s: escritura) {
+	          fw.write(s);
+	          fw.write("\n");
+	          fw.flush();
+	        }
+	        fw.close();
+		} catch(Exception e) {
+			System.out.println("Error intentando actualizar el valor del LED" + e.toString());
+		}
+	}
+
+	private void leerSensor() {
+		File catalinaBase = new File(System.getProperty("catalina.base")).getAbsoluteFile();
+		File archivo = new File(catalinaBase, "webapps\\Sonda\\WEB-INF\\services\\Sonda\\master\\sonda.txt");
+		
+		if(archivo.exists()) {
 			try {
-				FileReader fr = new FileReader(fichero);
+				FileReader fr = new FileReader(archivo);
 				BufferedReader br = new BufferedReader(fr);
 				String linea;
+				
 				while((linea = br.readLine()) != null) {
 					switch(linea.toLowerCase().split("=")[0]) {
 					case "volumen":
 						volumen = linea.split("=")[1];
 						break;
 					case "ultimafecha":
-						fechaUltimoCambio = linea.split("=")[1];
+						ultimaFecha = linea.split("=")[1];
 						break;
 					case "led":
 						led = linea.split("=")[1];
@@ -177,51 +153,38 @@ public class Sonda {
 				br.close();
 				fr.close();
 			} catch(Exception e) {
-				System.out.println("Error al leer el fichero del sensor: " + e.toString());
+				System.out.println("Error, la estructura del fichero sonda no es correcta: " + e.toString());
 			}
 		}
 		else {
 			try {
-				PrintWriter writer = new PrintWriter("sonda.txt", "UTF-8");
+				PrintWriter writer = new PrintWriter(archivo, "UTF-8");
 				writer.println("Volumen=30");
 				writer.println("UltimaFecha=20/09/2016 15:30:26");
 			    writer.println("Led=4500");
 			    writer.close();
-			    leerSensor(ficheroAsociado);
-			} catch(Exception e) {
-				System.out.println("Error creando el fichero por defecto del sensor " + id + ": " + e.toString());
+			    leerSensor();
+			} catch (Exception e) {
+			   System.out.println("Error creando el fichero por defecto \"sensor.txt\": " + e.toString());
 			}
-		}*/	
-	}
-	
-	public void escribeFichero(String valorAnterior, String nuevoValor, String nombreFichero) {
-		File fichero = new File(System.getProperty("user.dir") + nombreFichero);
-		String lectura = "";	
-		
-		try {
-	        FileReader fr = new FileReader(fichero);
-	        BufferedReader br = new BufferedReader(fr);
-
-	        String linea;
-	        while((linea = br.readLine()) != null) {
-	          if(linea.contains(valorAnterior)) {
-	            linea = linea.replace(valorAnterior, nuevoValor);
-	          }
-	          lectura += linea + ",";
-	        }
-	        br.close();
-	        fr.close();
-	        
-	        String[] escritura = lectura.split(",");
-	        FileWriter fw = new FileWriter(fichero, false);
-	        for(String s: escritura) {
-	          fw.write(s);
-	          fw.write("\n");
-	          fw.flush();
-	        }
-	        fw.close();
-		} catch(Exception e) {
-			System.out.println("Error haciendo Set de la luz del sensor: " + e.toString());
 		}
-}
+	}
+	private void leerKey() {
+		try {
+			File catalinaBase = new File(System.getProperty("catalina.base")).getAbsoluteFile();
+			File archivo = new File(catalinaBase, "webapps\\Sonda\\WEB-INF\\services\\Sonda\\master\\clave.txt");
+			//d
+			//System.out.println(archivo.getAbsolutePath());
+			FileReader fr = new FileReader(archivo);
+			BufferedReader br = new BufferedReader(fr);
+			String linea;
+			
+			linea = br.readLine();
+			key = linea;
+			br.close();
+			fr.close();
+		} catch(Exception e) {
+			System.out.println("Error leyendo el archivo que contiene la clave de encriptación: " + e.toString());
+		}
+	}
 }
