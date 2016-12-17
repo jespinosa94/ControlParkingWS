@@ -19,6 +19,7 @@ namespace Cliente
         private String ip_solicitada = "";
         private String puerto_solicitado = "";
         private int numero_sondas = 0;
+        private string key = "OFPcPBjssp4l1dXKcl17QA==";
 
         public Control(String p_usuario)
         {
@@ -112,7 +113,7 @@ namespace Cliente
                 }
                 try
                 {
-                    resultado = decrypt(resultado);
+                    resultado = Decrypt(resultado, key);
                     //richTextBox1.Text = resultado;
                 }
                 catch(Exception ex)
@@ -133,29 +134,52 @@ namespace Cliente
         {
 
         }
-                                            /**********************************************/
-                                            /**********************CIFRADO*****************/
-                                            /**********************************************/
-        private static String decrypt(string textoEncriptado)
+        /**********************************************/
+        /**********************CIFRADO*****************/
+        /**********************************************/
+
+        /*
+         * Sobrecarga de la clase RijndaelManaged
+         * */
+        public RijndaelManaged GetRijndaelManaged(String secretKey)
         {
-            string resultado = "";
-            RijndaelManaged encriptador = new RijndaelManaged();
-            encriptador.BlockSize = 128;
-            encriptador.KeySize = 256;
-            encriptador.Padding = PaddingMode.PKCS7;
-            string password = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";    //cambiar esto por leer key
-
-            byte[] key = System.Text.UTF8Encoding.Default.GetBytes(password);
-            SHA1 sha1 = SHA1Managed.Create();
-            byte[] hash = sha1.ComputeHash(key);
-            encriptador.Key = hash;
-
-            ICryptoTransform desencriptador = encriptador.CreateDecryptor();
-            byte[] bytesEncriptados = Convert.FromBase64CharArray(textoEncriptado.ToCharArray(), 0, textoEncriptado.Length);
-            byte[] datosDesencriptados = desencriptador.TransformFinalBlock(bytesEncriptados, 0, bytesEncriptados.Length);
-            resultado = ASCIIEncoding.UTF8.GetString(datosDesencriptados);
-            return resultado;
+            var keyBytes = new byte[16];
+            var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+            Array.Copy(secretKeyBytes, keyBytes, Math.Min(keyBytes.Length, secretKeyBytes.Length));
+            return new RijndaelManaged
+            {
+                Mode = CipherMode.CBC,
+                Padding = PaddingMode.None,
+                KeySize = 128,
+                BlockSize = 128,
+                Key = keyBytes,
+                IV = keyBytes
+            };
         }
-        
+
+        public byte[] Encrypt(byte[] plainBytes, RijndaelManaged rijndaelManaged)
+        {
+            return rijndaelManaged.CreateEncryptor()
+                .TransformFinalBlock(plainBytes, 0, plainBytes.Length);
+        }
+
+        public byte[] Decrypt(byte[] encryptedData, RijndaelManaged rijndaelManaged)
+        {
+            return rijndaelManaged.CreateDecryptor()
+                .TransformFinalBlock(encryptedData, 0, encryptedData.Length);
+        }
+
+        public String Encrypt(String plainText, String key)
+        {
+            var plainBytes = Encoding.UTF8.GetBytes(plainText);
+            return Convert.ToBase64String(Encrypt(plainBytes, GetRijndaelManaged(key)));
+        }
+
+        public String Decrypt(String encryptedText, String key)
+        {
+            var encryptedBytes = Convert.FromBase64String(encryptedText);
+            return Encoding.UTF8.GetString(Decrypt(encryptedBytes, GetRijndaelManaged(key)));
+        }
+
     }
 }
