@@ -20,8 +20,6 @@ namespace Cliente
         private Dictionary<string, string> sondas = new Dictionary<string, string>();
         private String usuario;
         private String validacion;
-        private String ip_solicitada = "";
-        private String puerto_solicitado = "";
         private int numero_sondas = 0;
 
 
