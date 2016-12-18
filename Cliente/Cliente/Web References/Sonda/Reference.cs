@@ -190,12 +190,14 @@ namespace Cliente.Sonda {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:setLed", RequestNamespace="http://master", OneWay=true, Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public void setLed([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string nuevoValorEncriptado, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string usuario, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string validacion) {
-            this.Invoke("setLed", new object[] {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:setLed", RequestNamespace="http://master", ResponseNamespace="http://master", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [return: System.Xml.Serialization.XmlElementAttribute("return", IsNullable=true)]
+        public string setLed([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string nuevoValorEncriptado, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string usuario, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string validacion) {
+            object[] results = this.Invoke("setLed", new object[] {
                         nuevoValorEncriptado,
                         usuario,
                         validacion});
+            return ((string)(results[0]));
         }
         
         /// <remarks/>
@@ -217,7 +219,7 @@ namespace Cliente.Sonda {
         private void OnsetLedOperationCompleted(object arg) {
             if ((this.setLedCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.setLedCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                this.setLedCompleted(this, new setLedCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -362,7 +364,29 @@ namespace Cliente.Sonda {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
-    public delegate void setLedCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    public delegate void setLedCompletedEventHandler(object sender, setLedCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class setLedCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal setLedCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+    }
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]

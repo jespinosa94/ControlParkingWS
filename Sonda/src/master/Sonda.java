@@ -5,9 +5,15 @@ import master.Encriptador;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
@@ -46,9 +52,10 @@ public class Sonda {
 		}	
 	}
 	public String getVolumen(String usuario, String validacion) {
+		Encriptador crypt = new Encriptador();
+		
 		if(buscaUsuario(validacion)) {
 			String mensaje = "";
-			Encriptador crypt = new Encriptador();
 
 			try {
 				this.usuario = crypt.decrypt(usuario, key);
@@ -60,73 +67,133 @@ public class Sonda {
 			inputLog("Peticion de volumen", "Se envia el volumen de la Sonda");
 			return mensaje;
 		} else {
-			return "Error de validación de usuario";
+			inputLog("Peticion de volumen", "Error de validacion de usuario: se envia mensaje de error");
+			try {
+				return crypt.encrypt("ErrorValidacion", key);
+			} catch(Exception e) {
+				System.out.println("Error al encriptar el volumen: " + e.toString());
+				inputLog("Peticion de volumen", "Error enviando el volumen de la Sonda");
+			}
 		}
+		return null;
 	}
 
 	public String getUltimaFecha(String usuario, String validacion) {
 		Encriptador crypt = new Encriptador();
-		String mensaje = "";
+		
+		if(buscaUsuario(validacion)) {
+			String mensaje = "";
 
-		try {
-			this.usuario = crypt.decrypt(usuario, key);
-			mensaje = crypt.encrypt(ultimaFecha, key);
-		} catch(Exception e) {
-			System.out.println("Error al encriptar el led: " + e.toString());
-			inputLog("Peticion de la ultima fecha registrada", "Error al enviar la ultima fecha registrada");
+			try {
+				this.usuario = crypt.decrypt(usuario, key);
+				mensaje = crypt.encrypt(ultimaFecha, key);
+			} catch(Exception e) {
+				System.out.println("Error al encriptar el led: " + e.toString());
+				inputLog("Peticion de la ultima fecha registrada", "Error al enviar la ultima fecha registrada");
+			}
+			inputLog("Peticion de la ultima fecha registrada", "Se envia correctamente la ultima fecha registrada");
+			return mensaje;
+		} else {
+			inputLog("Peticion de volumen", "Error de validacion de usuario: se envia mensaje de error");
+			try {
+				return crypt.encrypt("ErrorValidacion", key);
+			} catch(Exception e) {
+				System.out.println("Error al encriptar el volumen: " + e.toString());
+				inputLog("Peticion de volumen", "Error enviando el volumen de la Sonda");
+			}
 		}
-		inputLog("Peticion de la ultima fecha registrada", "Se envia correctamente la ultima fecha registrada");
-		return mensaje;
+		return null;
 	}
 
 	public String getLed(String usuario, String validacion) {
 		Encriptador crypt = new Encriptador();
-		String mensaje = "";
+		
+		if(buscaUsuario(validacion)) {
+			String mensaje = "";
 
-		try {
-			this.usuario = crypt.decrypt(usuario, key);
-			mensaje = crypt.encrypt(led, key);
-		} catch(Exception e) {
-			System.out.println("Error al encriptar el led: " + e.toString());
-			inputLog("Peticion del valor del LED", "Error enviando el valor del LED");
+			try {
+				this.usuario = crypt.decrypt(usuario, key);
+				mensaje = crypt.encrypt(led, key);
+			} catch(Exception e) {
+				System.out.println("Error al encriptar el led: " + e.toString());
+				inputLog("Peticion del valor del LED", "Error enviando el valor del LED");
+			}
+			inputLog("Peticion del valor del LED", "Se envia correctamente el valor del LED");
+			return mensaje;
+		} else {
+			inputLog("Peticion de volumen", "Error de validacion de usuario: se envia mensaje de error");
+			try {
+				return crypt.encrypt("ErrorValidacion", key);
+			} catch(Exception e) {
+				System.out.println("Error al encriptar el volumen: " + e.toString());
+				inputLog("Peticion de volumen", "Error enviando el volumen de la Sonda");
+			}
 		}
-		inputLog("Peticion del valor del LED", "Se envia correctamente el valor del LED");
-		return mensaje;
+		return null;
 	}
 
 	public String getFechaActual(String usuario, String validacion) {
 		Encriptador crypt = new Encriptador();
-		String mensaje = "";
-		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-		LocalDateTime now = LocalDateTime.now();
-		String fechaActual = now.format(formato);
+		
+		if(buscaUsuario(validacion)) {
+			String mensaje = "";
+			DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+			LocalDateTime now = LocalDateTime.now();
+			String fechaActual = now.format(formato);
 
-		try {
-			this.usuario = crypt.decrypt(usuario, key);
-			mensaje = crypt.encrypt(fechaActual, key);
-		} catch (Exception e) {
-			System.out.println("Error al encriptar la fecha actual: " + e.toString());
-			inputLog("Peticion de la fecha actual", "Error al enviar la fecha actual del sistema");
+			try {
+				this.usuario = crypt.decrypt(usuario, key);
+				mensaje = crypt.encrypt(fechaActual, key);
+			} catch (Exception e) {
+				System.out.println("Error al encriptar la fecha actual: " + e.toString());
+				inputLog("Peticion de la fecha actual", "Error al enviar la fecha actual del sistema");
+			}
+			inputLog("Peticion de la fecha actual", "Se envia correctamente la fecha actual del sistema");
+			return mensaje;
+		} else {
+			inputLog("Peticion de volumen", "Error de validacion de usuario: se envia mensaje de error");
+			try {
+				return crypt.encrypt("ErrorValidacion", key);
+			} catch(Exception e) {
+				System.out.println("Error al encriptar el volumen: " + e.toString());
+				inputLog("Peticion de volumen", "Error enviando el volumen de la Sonda");
+			}
 		}
-		inputLog("Peticion de la fecha actual", "Se envia correctamente la fecha actual del sistema");
-		return mensaje;
+		return null;
 	}
 
-	public void setLed(String nuevoValorEncriptado, String usuario, String validacion) {
+	public String setLed(String nuevoValorEncriptado, String usuario, String validacion) {
 		String valorAnterior = led;
 		String nuevoValor = "Error";
 		Encriptador crypt = new Encriptador();
 		
-		try {
-			this.usuario = crypt.decrypt(usuario, key);
-			nuevoValor = crypt.decrypt(nuevoValorEncriptado, key);
-			led = nuevoValor;
-			escribeFichero(valorAnterior, nuevoValor);
-		} catch(Exception e) {
-			System.out.println("Error actualizando el valor del led: " + e.toString());
-			inputLog("Modificacion del LED", "Error al modificar el valor del LED");
+		if(buscaUsuario(validacion)) {
+			try {
+				this.usuario = crypt.decrypt(usuario, key);
+				nuevoValor = crypt.decrypt(nuevoValorEncriptado, key);
+				led = nuevoValor;
+				escribeFichero(valorAnterior, nuevoValor);
+				return crypt.encrypt("Ok", key);
+			} catch(Exception e) {
+				System.out.println("Error actualizando el valor del led: " + e.toString());
+				inputLog("Modificacion del LED", "Error al modificar el valor del LED");
+			}
+			inputLog("Modificacion del LED", "Se modifica correctamente el valor del LED");
+		} else {
+			inputLog("Peticion de volumen", "Error de validacion de usuario: se envia mensaje de error");
+			try {
+				return crypt.encrypt("ErrorValidacion", key);
+			} catch(Exception e) {
+				System.out.println("Error al encriptar el volumen: " + e.toString());
+				inputLog("Peticion de volumen", "Error enviando el volumen de la Sonda");
+			}
 		}
-		inputLog("Modificacion del LED", "Se modifica correctamente el valor del LED");
+		try {
+			return crypt.encrypt("Ok", key);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 
 	private void escribeFichero(String valorAnterior, String nuevoValor) {

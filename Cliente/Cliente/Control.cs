@@ -133,8 +133,16 @@ namespace Cliente
                 try
                 {
                     resultado = Decrypt(resultado);
-                    richTextBox1.Text = resultado;
-                    richTextBox2.Text = "";
+                    if(resultado == "ErrorValidacion")
+                    {
+                        MessageBox.Show("Usuario no validado en la sonda especificada: \n\n", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        inputLog("Consultar sensor", "Error de validacion en la " + comboBox1.Text);
+                    }
+                    else
+                    {
+                        richTextBox1.Text = resultado;
+                        richTextBox2.Text = "";
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -169,10 +177,18 @@ namespace Cliente
                         mensaje = Encrypt(textBox2.Text);
                         try
                         {
-                            sonda.setLed(mensaje, Encrypt(usuario), validacion);
-                            richTextBox2.Text = "El valor de la " + comboBox3.Text + " se ha actualizado correctamente al valor: " + textBox2.Text;
-                            richTextBox1.Text = "";
-                            inputLog("Modificar LED", "Modificación del sensor de la " + comboBox3.Text);
+                            string resultado = Decrypt(sonda.setLed(mensaje, Encrypt(usuario), validacion));
+                            if(resultado != "ErrorValidacion")
+                            {
+                                richTextBox2.Text = "El valor de la " + comboBox3.Text + " se ha actualizado correctamente al valor: " + textBox2.Text;
+                                richTextBox1.Text = "";
+                                inputLog("Modificar LED", "Modificación del sensor de la " + comboBox3.Text);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Usuario no validado en la sonda especificada: \n\n", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                inputLog("Modificar LED", "Error de validacion en la " + comboBox3.Text);
+                            }
                         }
                         catch (Exception ex)
                         {

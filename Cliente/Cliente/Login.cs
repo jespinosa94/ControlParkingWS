@@ -47,16 +47,19 @@ namespace Cliente
                     if (Hash(textBox1.Text) == campos[0] && Hash(textBox2.Text) == campos[1])
                     {
                         loginOK = true;
-                        inputLog("Acceso al sistema", "");
-                        Control control = new Control(textBox1.Text, Hash(textBox1.Text) + "::" + Hash(textBox2.Text));
-                        this.Visible = false;
-                        control.Show();
                     }
                 }
                 if(!loginOK)
                 {
                     label3.Visible = true;
                     inputLog("Intento fallido de acceso al sistema", "");
+                }
+                else
+                {
+                    inputLog("Acceso al sistema", "");
+                    Control control = new Control(textBox1.Text, Hash(textBox1.Text) + "::" + Hash(textBox2.Text));
+                    this.Visible = false;
+                    control.Show();
                 }
                 textBox2.Text = "";
                 fichero.Close();
@@ -134,8 +137,6 @@ namespace Cliente
                         file.WriteLine(input);
                         file.Close();
                         inputLog("Registro de usuario", "Usuario " + textBox1.Text + " registrado correctamente");
-                        Sonda.Sonda sonda = new Sonda.Sonda();
-                        sonda.creaUsuario(input);
                         MessageBox.Show("Usuario registrado correctamente", "Registro de usuario", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
