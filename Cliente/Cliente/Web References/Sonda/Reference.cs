@@ -33,11 +33,11 @@ namespace Cliente.Sonda {
         
         private System.Threading.SendOrPostCallback getFechaActualOperationCompleted;
         
+        private System.Threading.SendOrPostCallback creaUsuarioOperationCompleted;
+        
         private System.Threading.SendOrPostCallback setLedOperationCompleted;
         
         private System.Threading.SendOrPostCallback getUltimaFechaOperationCompleted;
-        
-        private System.Threading.SendOrPostCallback decryptOperationCompleted;
         
         private System.Threading.SendOrPostCallback getLedOperationCompleted;
         
@@ -86,13 +86,13 @@ namespace Cliente.Sonda {
         public event getFechaActualCompletedEventHandler getFechaActualCompleted;
         
         /// <remarks/>
+        public event creaUsuarioCompletedEventHandler creaUsuarioCompleted;
+        
+        /// <remarks/>
         public event setLedCompletedEventHandler setLedCompleted;
         
         /// <remarks/>
         public event getUltimaFechaCompletedEventHandler getUltimaFechaCompleted;
-        
-        /// <remarks/>
-        public event decryptCompletedEventHandler decryptCompleted;
         
         /// <remarks/>
         public event getLedCompletedEventHandler getLedCompleted;
@@ -100,22 +100,26 @@ namespace Cliente.Sonda {
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:getVolumen", RequestNamespace="http://master", ResponseNamespace="http://master", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("return", IsNullable=true)]
-        public string getVolumen() {
-            object[] results = this.Invoke("getVolumen", new object[0]);
+        public string getVolumen([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string usuario, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string validacion) {
+            object[] results = this.Invoke("getVolumen", new object[] {
+                        usuario,
+                        validacion});
             return ((string)(results[0]));
         }
         
         /// <remarks/>
-        public void getVolumenAsync() {
-            this.getVolumenAsync(null);
+        public void getVolumenAsync(string usuario, string validacion) {
+            this.getVolumenAsync(usuario, validacion, null);
         }
         
         /// <remarks/>
-        public void getVolumenAsync(object userState) {
+        public void getVolumenAsync(string usuario, string validacion, object userState) {
             if ((this.getVolumenOperationCompleted == null)) {
                 this.getVolumenOperationCompleted = new System.Threading.SendOrPostCallback(this.OngetVolumenOperationCompleted);
             }
-            this.InvokeAsync("getVolumen", new object[0], this.getVolumenOperationCompleted, userState);
+            this.InvokeAsync("getVolumen", new object[] {
+                        usuario,
+                        validacion}, this.getVolumenOperationCompleted, userState);
         }
         
         private void OngetVolumenOperationCompleted(object arg) {
@@ -128,22 +132,26 @@ namespace Cliente.Sonda {
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:getFechaActual", RequestNamespace="http://master", ResponseNamespace="http://master", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("return", IsNullable=true)]
-        public string getFechaActual() {
-            object[] results = this.Invoke("getFechaActual", new object[0]);
+        public string getFechaActual([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string usuario, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string validacion) {
+            object[] results = this.Invoke("getFechaActual", new object[] {
+                        usuario,
+                        validacion});
             return ((string)(results[0]));
         }
         
         /// <remarks/>
-        public void getFechaActualAsync() {
-            this.getFechaActualAsync(null);
+        public void getFechaActualAsync(string usuario, string validacion) {
+            this.getFechaActualAsync(usuario, validacion, null);
         }
         
         /// <remarks/>
-        public void getFechaActualAsync(object userState) {
+        public void getFechaActualAsync(string usuario, string validacion, object userState) {
             if ((this.getFechaActualOperationCompleted == null)) {
                 this.getFechaActualOperationCompleted = new System.Threading.SendOrPostCallback(this.OngetFechaActualOperationCompleted);
             }
-            this.InvokeAsync("getFechaActual", new object[0], this.getFechaActualOperationCompleted, userState);
+            this.InvokeAsync("getFechaActual", new object[] {
+                        usuario,
+                        validacion}, this.getFechaActualOperationCompleted, userState);
         }
         
         private void OngetFechaActualOperationCompleted(object arg) {
@@ -154,24 +162,56 @@ namespace Cliente.Sonda {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:creaUsuario", RequestNamespace="http://master", OneWay=true, Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void creaUsuario([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string validacion) {
+            this.Invoke("creaUsuario", new object[] {
+                        validacion});
+        }
+        
+        /// <remarks/>
+        public void creaUsuarioAsync(string validacion) {
+            this.creaUsuarioAsync(validacion, null);
+        }
+        
+        /// <remarks/>
+        public void creaUsuarioAsync(string validacion, object userState) {
+            if ((this.creaUsuarioOperationCompleted == null)) {
+                this.creaUsuarioOperationCompleted = new System.Threading.SendOrPostCallback(this.OncreaUsuarioOperationCompleted);
+            }
+            this.InvokeAsync("creaUsuario", new object[] {
+                        validacion}, this.creaUsuarioOperationCompleted, userState);
+        }
+        
+        private void OncreaUsuarioOperationCompleted(object arg) {
+            if ((this.creaUsuarioCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.creaUsuarioCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:setLed", RequestNamespace="http://master", OneWay=true, Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public void setLed([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string nuevoValor) {
+        public void setLed([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string nuevoValorEncriptado, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string usuario, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string validacion) {
             this.Invoke("setLed", new object[] {
-                        nuevoValor});
+                        nuevoValorEncriptado,
+                        usuario,
+                        validacion});
         }
         
         /// <remarks/>
-        public void setLedAsync(string nuevoValor) {
-            this.setLedAsync(nuevoValor, null);
+        public void setLedAsync(string nuevoValorEncriptado, string usuario, string validacion) {
+            this.setLedAsync(nuevoValorEncriptado, usuario, validacion, null);
         }
         
         /// <remarks/>
-        public void setLedAsync(string nuevoValor, object userState) {
+        public void setLedAsync(string nuevoValorEncriptado, string usuario, string validacion, object userState) {
             if ((this.setLedOperationCompleted == null)) {
                 this.setLedOperationCompleted = new System.Threading.SendOrPostCallback(this.OnsetLedOperationCompleted);
             }
             this.InvokeAsync("setLed", new object[] {
-                        nuevoValor}, this.setLedOperationCompleted, userState);
+                        nuevoValorEncriptado,
+                        usuario,
+                        validacion}, this.setLedOperationCompleted, userState);
         }
         
         private void OnsetLedOperationCompleted(object arg) {
@@ -184,22 +224,26 @@ namespace Cliente.Sonda {
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:getUltimaFecha", RequestNamespace="http://master", ResponseNamespace="http://master", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("return", IsNullable=true)]
-        public string getUltimaFecha() {
-            object[] results = this.Invoke("getUltimaFecha", new object[0]);
+        public string getUltimaFecha([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string usuario, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string validacion) {
+            object[] results = this.Invoke("getUltimaFecha", new object[] {
+                        usuario,
+                        validacion});
             return ((string)(results[0]));
         }
         
         /// <remarks/>
-        public void getUltimaFechaAsync() {
-            this.getUltimaFechaAsync(null);
+        public void getUltimaFechaAsync(string usuario, string validacion) {
+            this.getUltimaFechaAsync(usuario, validacion, null);
         }
         
         /// <remarks/>
-        public void getUltimaFechaAsync(object userState) {
+        public void getUltimaFechaAsync(string usuario, string validacion, object userState) {
             if ((this.getUltimaFechaOperationCompleted == null)) {
                 this.getUltimaFechaOperationCompleted = new System.Threading.SendOrPostCallback(this.OngetUltimaFechaOperationCompleted);
             }
-            this.InvokeAsync("getUltimaFecha", new object[0], this.getUltimaFechaOperationCompleted, userState);
+            this.InvokeAsync("getUltimaFecha", new object[] {
+                        usuario,
+                        validacion}, this.getUltimaFechaOperationCompleted, userState);
         }
         
         private void OngetUltimaFechaOperationCompleted(object arg) {
@@ -210,54 +254,28 @@ namespace Cliente.Sonda {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:decrypt", RequestNamespace="http://master", ResponseNamespace="http://master", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        [return: System.Xml.Serialization.XmlElementAttribute("return", IsNullable=true)]
-        public string decrypt([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string s) {
-            object[] results = this.Invoke("decrypt", new object[] {
-                        s});
-            return ((string)(results[0]));
-        }
-        
-        /// <remarks/>
-        public void decryptAsync(string s) {
-            this.decryptAsync(s, null);
-        }
-        
-        /// <remarks/>
-        public void decryptAsync(string s, object userState) {
-            if ((this.decryptOperationCompleted == null)) {
-                this.decryptOperationCompleted = new System.Threading.SendOrPostCallback(this.OndecryptOperationCompleted);
-            }
-            this.InvokeAsync("decrypt", new object[] {
-                        s}, this.decryptOperationCompleted, userState);
-        }
-        
-        private void OndecryptOperationCompleted(object arg) {
-            if ((this.decryptCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.decryptCompleted(this, new decryptCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-            }
-        }
-        
-        /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("urn:getLed", RequestNamespace="http://master", ResponseNamespace="http://master", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("return", IsNullable=true)]
-        public string getLed() {
-            object[] results = this.Invoke("getLed", new object[0]);
+        public string getLed([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string usuario, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string validacion) {
+            object[] results = this.Invoke("getLed", new object[] {
+                        usuario,
+                        validacion});
             return ((string)(results[0]));
         }
         
         /// <remarks/>
-        public void getLedAsync() {
-            this.getLedAsync(null);
+        public void getLedAsync(string usuario, string validacion) {
+            this.getLedAsync(usuario, validacion, null);
         }
         
         /// <remarks/>
-        public void getLedAsync(object userState) {
+        public void getLedAsync(string usuario, string validacion, object userState) {
             if ((this.getLedOperationCompleted == null)) {
                 this.getLedOperationCompleted = new System.Threading.SendOrPostCallback(this.OngetLedOperationCompleted);
             }
-            this.InvokeAsync("getLed", new object[0], this.getLedOperationCompleted, userState);
+            this.InvokeAsync("getLed", new object[] {
+                        usuario,
+                        validacion}, this.getLedOperationCompleted, userState);
         }
         
         private void OngetLedOperationCompleted(object arg) {
@@ -340,6 +358,10 @@ namespace Cliente.Sonda {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
+    public delegate void creaUsuarioCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     public delegate void setLedCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
     
     /// <remarks/>
@@ -355,32 +377,6 @@ namespace Cliente.Sonda {
         private object[] results;
         
         internal getUltimaFechaCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        /// <remarks/>
-        public string Result {
-            get {
-                this.RaiseExceptionIfNecessary();
-                return ((string)(this.results[0]));
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
-    public delegate void decryptCompletedEventHandler(object sender, decryptCompletedEventArgs e);
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class decryptCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        internal decryptCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }

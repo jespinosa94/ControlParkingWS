@@ -5,54 +5,12 @@
 	</wsdl:documentation>
   <wsdl:types>
     <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://master">
-      <xs:element name="decrypt">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element minOccurs="0" name="s" nillable="true" type="xs:string" />
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="decryptResponse">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="setLed">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element minOccurs="0" name="nuevoValor" nillable="true" type="xs:string" />
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="getVolumen">
-        <xs:complexType>
-          <xs:sequence />
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="getVolumenResponse">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="getUltimaFecha">
-        <xs:complexType>
-          <xs:sequence />
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="getUltimaFechaResponse">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
       <xs:element name="getLed">
         <xs:complexType>
-          <xs:sequence />
+          <xs:sequence>
+            <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="validacion" nillable="true" type="xs:string" />
+          </xs:sequence>
         </xs:complexType>
       </xs:element>
       <xs:element name="getLedResponse">
@@ -62,12 +20,61 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="setLed">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="nuevoValorEncriptado" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="validacion" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="creaUsuario">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="validacion" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getVolumen">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="validacion" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getVolumenResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="getFechaActual">
         <xs:complexType>
-          <xs:sequence />
+          <xs:sequence>
+            <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="validacion" nillable="true" type="xs:string" />
+          </xs:sequence>
         </xs:complexType>
       </xs:element>
       <xs:element name="getFechaActualResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getUltimaFecha">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="validacion" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getUltimaFechaResponse">
         <xs:complexType>
           <xs:sequence>
             <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
@@ -88,6 +95,9 @@
   <wsdl:message name="getFechaActualResponse">
     <wsdl:part name="parameters" element="ns:getFechaActualResponse" />
   </wsdl:message>
+  <wsdl:message name="creaUsuarioRequest">
+    <wsdl:part name="parameters" element="ns:creaUsuario" />
+  </wsdl:message>
   <wsdl:message name="setLedRequest">
     <wsdl:part name="parameters" element="ns:setLed" />
   </wsdl:message>
@@ -96,12 +106,6 @@
   </wsdl:message>
   <wsdl:message name="getUltimaFechaResponse">
     <wsdl:part name="parameters" element="ns:getUltimaFechaResponse" />
-  </wsdl:message>
-  <wsdl:message name="decryptRequest">
-    <wsdl:part name="parameters" element="ns:decrypt" />
-  </wsdl:message>
-  <wsdl:message name="decryptResponse">
-    <wsdl:part name="parameters" element="ns:decryptResponse" />
   </wsdl:message>
   <wsdl:message name="getLedRequest">
     <wsdl:part name="parameters" element="ns:getLed" />
@@ -118,16 +122,15 @@
       <wsdl:input wsaw:Action="urn:getFechaActual" message="ns:getFechaActualRequest" />
       <wsdl:output wsaw:Action="urn:getFechaActualResponse" message="ns:getFechaActualResponse" />
     </wsdl:operation>
+    <wsdl:operation name="creaUsuario">
+      <wsdl:input wsaw:Action="urn:creaUsuario" message="ns:creaUsuarioRequest" />
+    </wsdl:operation>
     <wsdl:operation name="setLed">
       <wsdl:input wsaw:Action="urn:setLed" message="ns:setLedRequest" />
     </wsdl:operation>
     <wsdl:operation name="getUltimaFecha">
       <wsdl:input wsaw:Action="urn:getUltimaFecha" message="ns:getUltimaFechaRequest" />
       <wsdl:output wsaw:Action="urn:getUltimaFechaResponse" message="ns:getUltimaFechaResponse" />
-    </wsdl:operation>
-    <wsdl:operation name="decrypt">
-      <wsdl:input wsaw:Action="urn:decrypt" message="ns:decryptRequest" />
-      <wsdl:output wsaw:Action="urn:decryptResponse" message="ns:decryptResponse" />
     </wsdl:operation>
     <wsdl:operation name="getLed">
       <wsdl:input wsaw:Action="urn:getLed" message="ns:getLedRequest" />
@@ -154,6 +157,12 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="creaUsuario">
+      <soap:operation soapAction="urn:creaUsuario" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="setLed">
       <soap:operation soapAction="urn:setLed" style="document" />
       <wsdl:input>
@@ -162,15 +171,6 @@
     </wsdl:operation>
     <wsdl:operation name="getUltimaFecha">
       <soap:operation soapAction="urn:getUltimaFecha" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="decrypt">
-      <soap:operation soapAction="urn:decrypt" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -208,6 +208,12 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="creaUsuario">
+      <soap12:operation soapAction="urn:creaUsuario" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="setLed">
       <soap12:operation soapAction="urn:setLed" style="document" />
       <wsdl:input>
@@ -216,15 +222,6 @@
     </wsdl:operation>
     <wsdl:operation name="getUltimaFecha">
       <soap12:operation soapAction="urn:getUltimaFecha" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="decrypt">
-      <soap12:operation soapAction="urn:decrypt" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -262,6 +259,12 @@
         <mime:content part="parameters" type="application/xml" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="creaUsuario">
+      <http:operation location="creaUsuario" />
+      <wsdl:input>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="setLed">
       <http:operation location="setLed" />
       <wsdl:input>
@@ -270,15 +273,6 @@
     </wsdl:operation>
     <wsdl:operation name="getUltimaFecha">
       <http:operation location="getUltimaFecha" />
-      <wsdl:input>
-        <mime:content part="parameters" type="application/xml" />
-      </wsdl:input>
-      <wsdl:output>
-        <mime:content part="parameters" type="application/xml" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="decrypt">
-      <http:operation location="decrypt" />
       <wsdl:input>
         <mime:content part="parameters" type="application/xml" />
       </wsdl:input>
