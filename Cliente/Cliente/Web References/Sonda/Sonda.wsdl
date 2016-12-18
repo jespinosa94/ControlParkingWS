@@ -5,9 +5,58 @@
 	</wsdl:documentation>
   <wsdl:types>
     <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://master">
+      <xs:element name="getLed">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="validacion" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getLedResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="setLed">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="nuevoValorEncriptado" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="validacion" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="creaUsuario">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="validacion" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getVolumen">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="validacion" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getVolumenResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="getFechaActual">
         <xs:complexType>
-          <xs:sequence />
+          <xs:sequence>
+            <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="validacion" nillable="true" type="xs:string" />
+          </xs:sequence>
         </xs:complexType>
       </xs:element>
       <xs:element name="getFechaActualResponse">
@@ -17,116 +66,88 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-      <xs:element name="GetId">
+      <xs:element name="getUltimaFecha">
         <xs:complexType>
-          <xs:sequence />
+          <xs:sequence>
+            <xs:element minOccurs="0" name="usuario" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="validacion" nillable="true" type="xs:string" />
+          </xs:sequence>
         </xs:complexType>
       </xs:element>
-      <xs:element name="GetIdResponse">
+      <xs:element name="getUltimaFechaResponse">
         <xs:complexType>
           <xs:sequence>
             <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="SetLed">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element minOccurs="0" name="mensaje" nillable="true" type="xs:string" />
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="GetLed">
-        <xs:complexType>
-          <xs:sequence />
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="GetLedResponse">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="GetVolumen">
-        <xs:complexType>
-          <xs:sequence />
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="GetVolumenResponse">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="escribeFichero">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element minOccurs="0" name="valorAnterior" nillable="true" type="xs:string" />
-            <xs:element minOccurs="0" name="nuevoValor" nillable="true" type="xs:string" />
-            <xs:element minOccurs="0" name="nombreFichero" nillable="true" type="xs:string" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
     </xs:schema>
   </wsdl:types>
+  <wsdl:message name="getVolumenRequest">
+    <wsdl:part name="parameters" element="ns:getVolumen" />
+  </wsdl:message>
+  <wsdl:message name="getVolumenResponse">
+    <wsdl:part name="parameters" element="ns:getVolumenResponse" />
+  </wsdl:message>
   <wsdl:message name="getFechaActualRequest">
     <wsdl:part name="parameters" element="ns:getFechaActual" />
   </wsdl:message>
   <wsdl:message name="getFechaActualResponse">
     <wsdl:part name="parameters" element="ns:getFechaActualResponse" />
   </wsdl:message>
-  <wsdl:message name="GetLedRequest">
-    <wsdl:part name="parameters" element="ns:GetLed" />
+  <wsdl:message name="creaUsuarioRequest">
+    <wsdl:part name="parameters" element="ns:creaUsuario" />
   </wsdl:message>
-  <wsdl:message name="GetLedResponse">
-    <wsdl:part name="parameters" element="ns:GetLedResponse" />
+  <wsdl:message name="setLedRequest">
+    <wsdl:part name="parameters" element="ns:setLed" />
   </wsdl:message>
-  <wsdl:message name="GetIdRequest">
-    <wsdl:part name="parameters" element="ns:GetId" />
+  <wsdl:message name="getUltimaFechaRequest">
+    <wsdl:part name="parameters" element="ns:getUltimaFecha" />
   </wsdl:message>
-  <wsdl:message name="GetIdResponse">
-    <wsdl:part name="parameters" element="ns:GetIdResponse" />
+  <wsdl:message name="getUltimaFechaResponse">
+    <wsdl:part name="parameters" element="ns:getUltimaFechaResponse" />
   </wsdl:message>
-  <wsdl:message name="SetLedRequest">
-    <wsdl:part name="parameters" element="ns:SetLed" />
+  <wsdl:message name="getLedRequest">
+    <wsdl:part name="parameters" element="ns:getLed" />
   </wsdl:message>
-  <wsdl:message name="GetVolumenRequest">
-    <wsdl:part name="parameters" element="ns:GetVolumen" />
-  </wsdl:message>
-  <wsdl:message name="GetVolumenResponse">
-    <wsdl:part name="parameters" element="ns:GetVolumenResponse" />
-  </wsdl:message>
-  <wsdl:message name="escribeFicheroRequest">
-    <wsdl:part name="parameters" element="ns:escribeFichero" />
+  <wsdl:message name="getLedResponse">
+    <wsdl:part name="parameters" element="ns:getLedResponse" />
   </wsdl:message>
   <wsdl:portType name="SondaPortType">
+    <wsdl:operation name="getVolumen">
+      <wsdl:input wsaw:Action="urn:getVolumen" message="ns:getVolumenRequest" />
+      <wsdl:output wsaw:Action="urn:getVolumenResponse" message="ns:getVolumenResponse" />
+    </wsdl:operation>
     <wsdl:operation name="getFechaActual">
       <wsdl:input wsaw:Action="urn:getFechaActual" message="ns:getFechaActualRequest" />
       <wsdl:output wsaw:Action="urn:getFechaActualResponse" message="ns:getFechaActualResponse" />
     </wsdl:operation>
-    <wsdl:operation name="GetLed">
-      <wsdl:input wsaw:Action="urn:GetLed" message="ns:GetLedRequest" />
-      <wsdl:output wsaw:Action="urn:GetLedResponse" message="ns:GetLedResponse" />
+    <wsdl:operation name="creaUsuario">
+      <wsdl:input wsaw:Action="urn:creaUsuario" message="ns:creaUsuarioRequest" />
     </wsdl:operation>
-    <wsdl:operation name="GetId">
-      <wsdl:input wsaw:Action="urn:GetId" message="ns:GetIdRequest" />
-      <wsdl:output wsaw:Action="urn:GetIdResponse" message="ns:GetIdResponse" />
+    <wsdl:operation name="setLed">
+      <wsdl:input wsaw:Action="urn:setLed" message="ns:setLedRequest" />
     </wsdl:operation>
-    <wsdl:operation name="SetLed">
-      <wsdl:input wsaw:Action="urn:SetLed" message="ns:SetLedRequest" />
+    <wsdl:operation name="getUltimaFecha">
+      <wsdl:input wsaw:Action="urn:getUltimaFecha" message="ns:getUltimaFechaRequest" />
+      <wsdl:output wsaw:Action="urn:getUltimaFechaResponse" message="ns:getUltimaFechaResponse" />
     </wsdl:operation>
-    <wsdl:operation name="GetVolumen">
-      <wsdl:input wsaw:Action="urn:GetVolumen" message="ns:GetVolumenRequest" />
-      <wsdl:output wsaw:Action="urn:GetVolumenResponse" message="ns:GetVolumenResponse" />
-    </wsdl:operation>
-    <wsdl:operation name="escribeFichero">
-      <wsdl:input wsaw:Action="urn:escribeFichero" message="ns:escribeFicheroRequest" />
+    <wsdl:operation name="getLed">
+      <wsdl:input wsaw:Action="urn:getLed" message="ns:getLedRequest" />
+      <wsdl:output wsaw:Action="urn:getLedResponse" message="ns:getLedResponse" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="SondaSoap11Binding" type="ns:SondaPortType">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getVolumen">
+      <soap:operation soapAction="urn:getVolumen" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="getFechaActual">
       <soap:operation soapAction="urn:getFechaActual" style="document" />
       <wsdl:input>
@@ -136,8 +157,20 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetLed">
-      <soap:operation soapAction="urn:GetLed" style="document" />
+    <wsdl:operation name="creaUsuario">
+      <soap:operation soapAction="urn:creaUsuario" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="setLed">
+      <soap:operation soapAction="urn:setLed" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="getUltimaFecha">
+      <soap:operation soapAction="urn:getUltimaFecha" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -145,39 +178,27 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetId">
-      <soap:operation soapAction="urn:GetId" style="document" />
+    <wsdl:operation name="getLed">
+      <soap:operation soapAction="urn:getLed" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
       <wsdl:output>
         <soap:body use="literal" />
       </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SetLed">
-      <soap:operation soapAction="urn:SetLed" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-    </wsdl:operation>
-    <wsdl:operation name="GetVolumen">
-      <soap:operation soapAction="urn:GetVolumen" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="escribeFichero">
-      <soap:operation soapAction="urn:escribeFichero" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="SondaSoap12Binding" type="ns:SondaPortType">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getVolumen">
+      <soap12:operation soapAction="urn:getVolumen" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="getFechaActual">
       <soap12:operation soapAction="urn:getFechaActual" style="document" />
       <wsdl:input>
@@ -187,8 +208,20 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetLed">
-      <soap12:operation soapAction="urn:GetLed" style="document" />
+    <wsdl:operation name="creaUsuario">
+      <soap12:operation soapAction="urn:creaUsuario" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="setLed">
+      <soap12:operation soapAction="urn:setLed" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="getUltimaFecha">
+      <soap12:operation soapAction="urn:getUltimaFecha" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -196,39 +229,27 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetId">
-      <soap12:operation soapAction="urn:GetId" style="document" />
+    <wsdl:operation name="getLed">
+      <soap12:operation soapAction="urn:getLed" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SetLed">
-      <soap12:operation soapAction="urn:SetLed" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-    </wsdl:operation>
-    <wsdl:operation name="GetVolumen">
-      <soap12:operation soapAction="urn:GetVolumen" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="escribeFichero">
-      <soap12:operation soapAction="urn:escribeFichero" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="SondaHttpBinding" type="ns:SondaPortType">
     <http:binding verb="POST" />
+    <wsdl:operation name="getVolumen">
+      <http:operation location="getVolumen" />
+      <wsdl:input>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="getFechaActual">
       <http:operation location="getFechaActual" />
       <wsdl:input>
@@ -238,8 +259,20 @@
         <mime:content part="parameters" type="application/xml" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetLed">
-      <http:operation location="GetLed" />
+    <wsdl:operation name="creaUsuario">
+      <http:operation location="creaUsuario" />
+      <wsdl:input>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="setLed">
+      <http:operation location="setLed" />
+      <wsdl:input>
+        <mime:content part="parameters" type="application/xml" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="getUltimaFecha">
+      <http:operation location="getUltimaFecha" />
       <wsdl:input>
         <mime:content part="parameters" type="application/xml" />
       </wsdl:input>
@@ -247,35 +280,14 @@
         <mime:content part="parameters" type="application/xml" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetId">
-      <http:operation location="GetId" />
+    <wsdl:operation name="getLed">
+      <http:operation location="getLed" />
       <wsdl:input>
         <mime:content part="parameters" type="application/xml" />
       </wsdl:input>
       <wsdl:output>
         <mime:content part="parameters" type="application/xml" />
       </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SetLed">
-      <http:operation location="SetLed" />
-      <wsdl:input>
-        <mime:content part="parameters" type="application/xml" />
-      </wsdl:input>
-    </wsdl:operation>
-    <wsdl:operation name="GetVolumen">
-      <http:operation location="GetVolumen" />
-      <wsdl:input>
-        <mime:content part="parameters" type="application/xml" />
-      </wsdl:input>
-      <wsdl:output>
-        <mime:content part="parameters" type="application/xml" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="escribeFichero">
-      <http:operation location="escribeFichero" />
-      <wsdl:input>
-        <mime:content part="parameters" type="application/xml" />
-      </wsdl:input>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="Sonda">

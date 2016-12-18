@@ -3,6 +3,8 @@ package master;
 import master.Encriptador;
 
 import java.io.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -14,12 +16,13 @@ public class Sonda {
 	private String volumen;
 	private String ultimaFecha;
 	private String led;
-	
+	private String usuario = "";
+
 	public Sonda() {
 		leerKey();
 		leerSensor();
 	}
-	
+
 	//d
 	/*public String decrypt(String s) {
 		Encriptador crypt = new Encriptador();
@@ -31,81 +34,113 @@ public class Sonda {
 		}
 		return mensaje;
 	}*/
-	
-	public String getVolumen() {
-		String mensaje = "";
-		Encriptador crypt = new Encriptador();
+	public void creaUsuario(String validacion) {
+		File catalinaBase = new File(System.getProperty("catalina.base")).getAbsoluteFile();
 		
 		try {
-			mensaje = crypt.encrypt(volumen, key);
-		} catch(Exception e) {
-			System.out.println("Error al encriptar el volumen: " + e.toString());
-		}
-		return mensaje;
+			FileWriter archivo = new FileWriter( new File(catalinaBase, "webapps\\Sonda\\WEB-INF\\services\\Sonda\\master\\usuarios.txt"), true);
+			archivo.write(validacion + "\n");
+			archivo.close();
+		} catch (Exception e) {
+		   System.out.println("Error escribiendo en el log: " + e.toString());
+		}	
 	}
-	
-	public String getUltimaFecha() {
+	public String getVolumen(String usuario, String validacion) {
+		if(buscaUsuario(validacion)) {
+			String mensaje = "";
+			Encriptador crypt = new Encriptador();
+
+			try {
+				this.usuario = crypt.decrypt(usuario, key);
+				mensaje = crypt.encrypt(volumen, key);
+			} catch(Exception e) {
+				System.out.println("Error al encriptar el volumen: " + e.toString());
+				inputLog("Peticion de volumen", "Error enviando el volumen de la Sonda");
+			}
+			inputLog("Peticion de volumen", "Se envia el volumen de la Sonda");
+			return mensaje;
+		} else {
+			return "Error de validación de usuario";
+		}
+	}
+
+	public String getUltimaFecha(String usuario, String validacion) {
 		Encriptador crypt = new Encriptador();
 		String mensaje = "";
-		
+
 		try {
+			this.usuario = crypt.decrypt(usuario, key);
 			mensaje = crypt.encrypt(ultimaFecha, key);
 		} catch(Exception e) {
 			System.out.println("Error al encriptar el led: " + e.toString());
+			inputLog("Peticion de la ultima fecha registrada", "Error al enviar la ultima fecha registrada");
 		}
+		inputLog("Peticion de la ultima fecha registrada", "Se envia correctamente la ultima fecha registrada");
 		return mensaje;
 	}
-	
-	public String getLed() {
+
+	public String getLed(String usuario, String validacion) {
 		Encriptador crypt = new Encriptador();
 		String mensaje = "";
-		
+
 		try {
+			this.usuario = crypt.decrypt(usuario, key);
 			mensaje = crypt.encrypt(led, key);
 		} catch(Exception e) {
 			System.out.println("Error al encriptar el led: " + e.toString());
+			inputLog("Peticion del valor del LED", "Error enviando el valor del LED");
 		}
+		inputLog("Peticion del valor del LED", "Se envia correctamente el valor del LED");
 		return mensaje;
 	}
-	
-	public String getFechaActual() {
+
+	public String getFechaActual(String usuario, String validacion) {
 		Encriptador crypt = new Encriptador();
 		String mensaje = "";
 		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
 		String fechaActual = now.format(formato);
-		
+
 		try {
+			this.usuario = crypt.decrypt(usuario, key);
 			mensaje = crypt.encrypt(fechaActual, key);
 		} catch (Exception e) {
 			System.out.println("Error al encriptar la fecha actual: " + e.toString());
+			inputLog("Peticion de la fecha actual", "Error al enviar la fecha actual del sistema");
 		}
+		inputLog("Peticion de la fecha actual", "Se envia correctamente la fecha actual del sistema");
 		return mensaje;
 	}
-	
-	public void setLed(String nuevoValor) {
+
+	public void setLed(String nuevoValorEncriptado, String usuario, String validacion) {
 		String valorAnterior = led;
+		String nuevoValor = "Error";
+		Encriptador crypt = new Encriptador();
 		
-		led = nuevoValor;
 		try {
+			this.usuario = crypt.decrypt(usuario, key);
+			nuevoValor = crypt.decrypt(nuevoValorEncriptado, key);
+			led = nuevoValor;
 			escribeFichero(valorAnterior, nuevoValor);
 		} catch(Exception e) {
 			System.out.println("Error actualizando el valor del led: " + e.toString());
+			inputLog("Modificacion del LED", "Error al modificar el valor del LED");
 		}
+		inputLog("Modificacion del LED", "Se modifica correctamente el valor del LED");
 	}
-	
+
 	private void escribeFichero(String valorAnterior, String nuevoValor) {
 		File catalinaBase = new File(System.getProperty("catalina.base")).getAbsoluteFile();
 		File archivo = new File(catalinaBase, "webapps\\Sonda\\WEB-INF\\services\\Sonda\\master\\sonda.txt");
 		String lectura = "";
-		
+
 		try {
 			FileReader fr = new FileReader(archivo);
 			BufferedReader br = new BufferedReader(fr);
 			String linea = "";
-			
+
 			while((linea = br.readLine()) != null) {
-				if(linea.contains(valorAnterior)) {
+				if(linea.contains("Led=" + valorAnterior)) {
 					linea = linea.replace(valorAnterior, nuevoValor);
 				}
 				lectura += linea + ",";
@@ -122,7 +157,9 @@ public class Sonda {
 	          fw.flush();
 	        }
 	        fw.close();
+	        inputLog("Escritura en el fichero sonda.txt", "Se modifica el valor LED");
 		} catch(Exception e) {
+			inputLog("Error en escritura en el fichero sonda.txt", "");
 			System.out.println("Error intentando actualizar el valor del LED" + e.toString());
 		}
 	}
@@ -130,13 +167,13 @@ public class Sonda {
 	private void leerSensor() {
 		File catalinaBase = new File(System.getProperty("catalina.base")).getAbsoluteFile();
 		File archivo = new File(catalinaBase, "webapps\\Sonda\\WEB-INF\\services\\Sonda\\master\\sonda.txt");
-		
+
 		if(archivo.exists()) {
 			try {
 				FileReader fr = new FileReader(archivo);
 				BufferedReader br = new BufferedReader(fr);
 				String linea;
-				
+
 				while((linea = br.readLine()) != null) {
 					switch(linea.toLowerCase().split("=")[0]) {
 					case "volumen":
@@ -152,8 +189,10 @@ public class Sonda {
 				}
 				br.close();
 				fr.close();
+				//inputLog("Lectura del fichero sonda.txt", "");
 			} catch(Exception e) {
 				System.out.println("Error, la estructura del fichero sonda no es correcta: " + e.toString());
+				//inputLog("Error durante la lectura del fichero sonda.txt", "");
 			}
 		}
 		else {
@@ -163,8 +202,10 @@ public class Sonda {
 				writer.println("UltimaFecha=20/09/2016 15:30:26");
 			    writer.println("Led=4500");
 			    writer.close();
+			    inputLog("Creacion del fichero sonda.txt", "");
 			    leerSensor();
 			} catch (Exception e) {
+			   inputLog("Error durante la creacion del fichero sonda.txt", "");
 			   System.out.println("Error creando el fichero por defecto \"sensor.txt\": " + e.toString());
 			}
 		}
@@ -178,13 +219,77 @@ public class Sonda {
 			FileReader fr = new FileReader(archivo);
 			BufferedReader br = new BufferedReader(fr);
 			String linea;
-			
+
 			linea = br.readLine();
 			key = linea;
 			br.close();
 			fr.close();
+			//inputLog("Lectura de la clave de encriptado", "");
 		} catch(Exception e) {
-			System.out.println("Error leyendo el archivo que contiene la clave de encriptación: " + e.toString());
+			System.out.println("Error leyendo el archivo que contiene la clave de encriptacion: " + e.toString());
+			//inputLog("Error durante la lectura de la clave de encriptado", "");
 		}
+	}
+	
+	private void inputLog(String accion, String descripcion) {
+		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		LocalDateTime now = LocalDateTime.now();
+		String fechaActual = now.format(formato);
+		String ip = "127.0.0.1";
+		String input = "";
+		try {
+			InetAddress IP=InetAddress.getLocalHost();
+			ip = IP.toString();
+		} catch (UnknownHostException e) {
+			ip = "127.0.0.1";
+		}
+		
+		input = fechaActual + ", " + ip + ", " + usuario + ", " + accion;
+        if(descripcion != "")
+        {
+            input += ", " + descripcion;
+        }
+		File catalinaBase = new File(System.getProperty("catalina.base")).getAbsoluteFile();
+		
+		try {
+			FileWriter archivo = new FileWriter( new File(catalinaBase, "webapps\\Sonda\\WEB-INF\\services\\Sonda\\master\\log.txt"), true);
+			archivo.write(input + "\n");
+			archivo.close();
+		} catch (Exception e) {
+		   System.out.println("Error escribiendo en el log: " + e.toString());
+		}	
+	}
+	
+	private boolean buscaUsuario(String validacion) {
+		File catalinaBase = new File(System.getProperty("catalina.base")).getAbsoluteFile();
+		File archivo = new File(catalinaBase, "webapps\\Sonda\\WEB-INF\\services\\Sonda\\master\\usuarios.txt");
+
+		if(archivo.exists()) {
+			try {
+				FileReader fr = new FileReader(archivo);
+				BufferedReader br = new BufferedReader(fr);
+				String linea;
+
+				while((linea = br.readLine()) != null) {
+					if(linea.equals(validacion)) {
+						br.close();
+						fr.close();
+						return true;
+					}	
+				}
+				br.close();
+				fr.close();
+				return false;
+				//inputLog("Lectura del fichero sonda.txt", "");
+			} catch(Exception e) {
+				System.out.println("Error, archivo usuarios.txt corrupto: " + e.toString());
+				//inputLog("Error durante la lectura del fichero sonda.txt", "");
+			}
+		}
+		else {
+			System.out.println("Error, archivo usuarios.txt corrupto");
+			return false;
+		}
+		return false;
 	}
 }
