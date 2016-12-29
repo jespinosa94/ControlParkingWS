@@ -5,4 +5,5 @@
 <fullyQualifiedTypeName name="org.apache.axis2.util.FileWriter"/>
 <fullyQualifiedTypeName name="java.io.FileWriter"/>
 <fullyQualifiedTypeName name="java.io.PrintWriter"/>
+<fullyQualifiedTypeName name="org.apache.tomcat.util.codec.binary.Base64"/>
 </qualifiedTypeNameHistroy>
